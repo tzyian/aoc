@@ -15,12 +15,13 @@ defmodule AOC2025.Runner do
   """
 
   @spec run_file(integer(), integer(), String.t() | nil) :: {float(), any()}
-  def run_file(day, part \\ 1, file_path \\ nil) when is_integer(day) and is_integer(part) do
+  def run_file(day, part \\ 1, file_path \\ nil, example \\ nil)
+      when is_integer(day) and is_integer(part) do
     path =
-      if file_path do
-        Path.expand(file_path)
-      else
-        default_input_path(day)
+      case {file_path, example} do
+        {nil, nil} -> Path.expand("inputs/day#{pad_day(day)}.txt")
+        {nil, true} -> Path.expand("inputs/day#{pad_day(day)}_example.txt")
+        {file_path, _} -> file_path
       end
 
     input = File.read!(path)
@@ -30,10 +31,6 @@ defmodule AOC2025.Runner do
 
     {time, result} = :timer.tc(fn -> apply(mod, fun, [input]) end)
     {time / 1_000_000, result}
-  end
-
-  defp default_input_path(day) do
-    Path.expand("inputs/day#{pad_day(day)}.txt")
   end
 
   defp pad_day(d) when d < 10, do: "0#{d}"

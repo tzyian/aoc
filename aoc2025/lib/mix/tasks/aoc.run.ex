@@ -18,7 +18,7 @@ defmodule Mix.Tasks.Aoc.Run do
   def run(argv) do
     Mix.Task.run("app.start")
 
-    {opts, args, _} = OptionParser.parse(argv, switches: [file: :string])
+    {opts, args, _} = OptionParser.parse(argv, switches: [file: :string, example: :boolean])
 
     {day, part} =
       case args do
@@ -34,8 +34,11 @@ defmodule Mix.Tasks.Aoc.Run do
       end
 
     try do
-      {time, result} = AOC2025.Runner.run_file(day, part, opts[:file])
-      Mix.shell().info("Day #{day} Part #{part} Result (#{time}s):\n#{inspect(result)}")
+      {time, result} = AOC2025.Runner.run_file(day, part, opts[:file], opts[:example])
+
+      Mix.shell().info(
+        "Day #{day} Part #{part} #{if opts[:example], do: "Example", else: ""} Result (#{time}s):\n#{inspect(result)}"
+      )
     rescue
       e in File.Error ->
         Mix.shell().error("Input file not found: #{e.path}")
