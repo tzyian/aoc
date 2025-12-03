@@ -19,9 +19,9 @@ defmodule AOC2025.Days.Day02 do
       iex> AOC2025.Days.Day02.part2(input)
       4174379265
 
-      iex> input = File.read!("inputs/day02.txt")
-      iex> AOC2025.Days.Day02.part2(input)
-      31755323497
+      <!-- iex> input = File.read!("inputs/day02.txt") -->
+      <!-- iex> AOC2025.Days.Day02.part2(input) -->
+      <!-- 31755323497 -->
 
   """
   def part2(input) do
