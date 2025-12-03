@@ -14,7 +14,7 @@ defmodule AOC2025.Runner do
 
   """
 
-  @spec run_file(integer(), integer(), String.t() | nil) :: {:ok, any()} | {:error, any()}
+  @spec run_file(integer(), integer(), String.t() | nil) :: {float(), any()}
   def run_file(day, part \\ 1, file_path \\ nil) when is_integer(day) and is_integer(part) do
     path =
       if file_path do
@@ -28,7 +28,8 @@ defmodule AOC2025.Runner do
     mod = Module.concat([AOC2025, Days, "Day#{pad_day(day)}"])
     fun = String.to_atom("part#{part}")
 
-    apply(mod, fun, [input])
+    {time, result} = :timer.tc(fn -> apply(mod, fun, [input]) end)
+    {time / 1_000_000, result}
   end
 
   defp default_input_path(day) do

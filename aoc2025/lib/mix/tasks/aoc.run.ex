@@ -34,8 +34,8 @@ defmodule Mix.Tasks.Aoc.Run do
       end
 
     try do
-      result = AOC2025.Runner.run_file(day, part, opts[:file])
-      Mix.shell().info("#{result}")
+      {time, result} = AOC2025.Runner.run_file(day, part, opts[:file])
+      Mix.shell().info("Day #{day} Part #{part} Result (#{time}s):\n#{inspect(result)}")
     rescue
       e in File.Error ->
         Mix.shell().error("Input file not found: #{e.path}")
