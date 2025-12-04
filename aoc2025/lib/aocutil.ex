@@ -3,13 +3,27 @@ defmodule AocUtil do
   @type coord() :: {i :: non_neg_integer(), j :: non_neg_integer()}
   @type grid() :: %{coord() => any()}
 
+  @doc """
+  Returns {grid, nrows, ncols}, where grid is a map of coordinates to values.
+      iex> input = "abc\\ndef\\nghi"
+      iex> {grid, nrows, ncols} = AocUtil.parse_grid(input)
+      iex> nrows
+      3
+      iex> ncols
+      3
+      iex> grid[{0,0}]
+      "a"
+      iex> grid[{1,1}]
+      "e"
+      iex> grid[{2,2}]
+      "i"
+  """
   @spec parse_grid(String.t(), (String.t() -> any())) ::
           {grid(), non_neg_integer(), non_neg_integer()}
-
-  # Note that grid coordinates is 0,0 at top left, and
-  # (0, 1) to the right
-  # (1, 0) to the bottom
   def parse_grid(input, transform \\ & &1) do
+    # Note that grid coordinates is 0,0 at top left, and
+    # (0, 1) to the right
+    # (1, 0) to the bottom
     rows = String.split(input, "\n", trim: true)
     nrows = length(rows)
     ncols = hd(rows) |> String.codepoints() |> length()
