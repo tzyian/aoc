@@ -20,7 +20,6 @@ defmodule AOC2025.Days.Day06 do
     |> transpose()
     |> Enum.map(&solve/1)
     |> Enum.sum()
-
   end
 
   def transpose(matrix) do
@@ -47,6 +46,10 @@ defmodule AOC2025.Days.Day06 do
       iex> input = File.read!("inputs/day06_example.txt")
       iex> AOC2025.Days.Day06.part2(input)
       3263827
+
+      iex> input = File.read!("inputs/day06.txt")
+      iex> AOC2025.Days.Day06.part2(input)
+      9581313737063
   """
   def part2(input) do
     # Implement Part 2 solution here
@@ -66,21 +69,15 @@ defmodule AOC2025.Days.Day06 do
       6,98 ,215,314
     """
 
-    rows =
-      rows
-      # last column needs to add a single separator column
-      |> Enum.map(fn line -> line <> " " end)
-      |> Enum.map(&split_at_indices(&1, indices))
-      |> Enum.map(fn nums ->
-        # get rid of separator column
-        Enum.map(nums, fn x -> binary_part(x, 0, byte_size(x) - 1) end)
-      end)
-      |> Enum.reverse()
-
     ops =
       ops
       |> String.split()
       |> Enum.map(&String.trim/1)
+
+    rows =
+      rows
+      |> Enum.map(&parse(&1, indices))
+      |> Enum.reverse()
 
     [ops | rows]
     |> transpose()
@@ -88,7 +85,7 @@ defmodule AOC2025.Days.Day06 do
     |> Enum.sum()
   end
 
-  def get_split_indices(s) do
+  defp get_split_indices(s) do
     Regex.scan(~r/\*|\+/, s, return: :index)
     |> List.flatten()
     |> Enum.map(&elem(&1, 0))
@@ -96,7 +93,7 @@ defmodule AOC2025.Days.Day06 do
     |> tl()
   end
 
-  def split_at_indices(str, idxs) do
+  defp split_at_indices(str, idxs) do
     n = byte_size(str)
 
     {parts, prev} =
@@ -105,6 +102,12 @@ defmodule AOC2025.Days.Day06 do
       end)
 
     parts ++ [binary_part(str, prev, n - prev)]
+  end
+
+  defp parse(row, indices) do
+    (row <> " ")
+    |> split_at_indices(indices)
+    |> Enum.map(fn x -> binary_part(x, 0, byte_size(x) - 1) end)
   end
 
   @doc """
@@ -117,7 +120,7 @@ defmodule AOC2025.Days.Day06 do
       1061
   """
   def solve2([op | xs]) do
-    nums = 
+    nums =
       xs
       |> Enum.map(&String.graphemes/1)
       |> transpose()
