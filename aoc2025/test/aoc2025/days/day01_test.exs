@@ -1,5 +1,5 @@
 defmodule AOC2025.Days.Day01Test do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest AOC2025.Days.Day01
 
   # test "part 1 with example input" do

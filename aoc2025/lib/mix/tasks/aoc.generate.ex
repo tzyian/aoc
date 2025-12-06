@@ -74,7 +74,7 @@ defmodule Mix.Tasks.Aoc.Generate do
     unless File.exists?(test_file_path) do
       File.write!(test_file_path, """
       defmodule #{module_name}Test do
-        use ExUnit.Case
+        use ExUnit.Case, async: true, async: true
         doctest AOC2025.Days.Day#{day_padded}
 
       end
