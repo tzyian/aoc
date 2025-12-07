@@ -28,13 +28,13 @@ defmodule AOC2025.Days.Day06 do
     |> Enum.map(&Tuple.to_list/1)
   end
 
-  defp solve([op | xs]) when op == "*" do
+  defp solve(["*" | xs]) do
     xs
     |> Enum.map(&String.to_integer/1)
-    |> Enum.reduce(&(&1 * &2))
+    |> Enum.product()
   end
 
-  defp solve([op | xs]) when op == "+" do
+  defp solve(["+" | xs]) do
     xs
     |> Enum.map(&String.to_integer/1)
     |> Enum.sum()
@@ -52,6 +52,39 @@ defmodule AOC2025.Days.Day06 do
       9581313737063
   """
   def part2(input) do
+    input
+    |> String.split("\n", trim: true)
+    |> Enum.map(&String.codepoints/1)
+    |> Enum.reverse()
+    |> transpose()
+    |> Enum.map(fn [x | xs] -> [x | Enum.reverse(xs)] end)
+    |> solve3()
+  end
+
+  defp parse_number(row) do
+    case row |> tl |> Enum.join() |> String.trim() do
+      "" -> nil
+      x -> String.to_integer(x)
+    end
+  end
+
+  defp solve3(instructions) do
+    {total, curr, _} =
+      Enum.reduce(instructions, {0, 0, &+/2}, fn inst, {total, curr, op} ->
+        case {hd(inst), parse_number(inst)} do
+          {" ", nil} -> {total + curr, 0, op}
+          {"+", num} -> {total, num, &+/2}
+          {"*", num} -> {total, num, &*/2}
+          {" ", num} -> {total, op.(curr, num), op}
+        end
+      end)
+
+    total + curr
+  end
+
+  # ===========================================================
+
+  def part2_old(input) do
     # Implement Part 2 solution here
 
     [ops | rows] = String.split(input, "\n", trim: true) |> Enum.reverse()
@@ -129,7 +162,7 @@ defmodule AOC2025.Days.Day06 do
       |> Enum.map(&String.to_integer/1)
 
     case String.trim(op) do
-      "*" -> Enum.reduce(nums, &(&1 * &2))
+      "*" -> Enum.product(nums)
       "+" -> Enum.sum(nums)
     end
   end
