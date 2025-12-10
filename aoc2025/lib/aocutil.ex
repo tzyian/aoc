@@ -45,17 +45,16 @@ defmodule AocUtil do
   end
 
   @spec inspect_grid(grid(), non_neg_integer(), non_neg_integer()) :: any()
-  def inspect_grid(grid, nrows, ncols) do
+  def inspect_grid(grid, nrows, ncols, default \\ ".") do
     Enum.reduce((nrows - 1)..0//-1, [], fn i, racc ->
       row =
         Enum.reduce((ncols - 1)..0//-1, [], fn j, cacc ->
-          ele = grid[{i, j}]
+          ele = Map.get(grid, {i, j}, default)
           [ele | cacc]
         end)
 
       [row | racc]
     end)
-    |> IO.inspect()
   end
 
   def plot_map_on_grid(map, grid) do
