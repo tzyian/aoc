@@ -30,38 +30,23 @@ defmodule AOC2025.Days.Day09 do
     (abs(xi - xj) + 1) * (abs(yi - yj) + 1)
   end
 
-  # TODO:
   @doc """
       iex> input = File.read!("inputs/day09_example.txt")
       iex> AOC2025.Days.Day09.part2(input)
       :not_implemented
-      # 24
 
   """
   def part2(input) do
     # Implement Part 2 solution here
     grid = parse(input)
 
-    max_x =
-      grid
-      |> Enum.map(fn [x, _y] -> x end)
-      |> Enum.max()
+    # The coords that have the maximal difference are the following
+    # (1874, 50137), (94901, 50137)
+    #                (94901, 48623), (1544, 48623)
 
-    max_y =
-      grid
-      |> Enum.map(fn [_x, y] -> y end)
-      |> Enum.max()
-
-    plot =
-      grid
-      |> Enum.map(fn [x, y] -> {y, x} end)
-      |> Map.from_keys("x")
-
-    _out =
-      AocUtil.inspect_grid(plot, max_y + 2, max_x + 2, ".")
-      |> Enum.map(&Enum.join/1)
-      |> Enum.join("\n")
-
+    # Then find the largest rectangle between the high coords
+    # Actually just did in python cos matplotlib can visualise lol
+    # Do see the subreddit for other different solutions
     :not_implemented
   end
 end
