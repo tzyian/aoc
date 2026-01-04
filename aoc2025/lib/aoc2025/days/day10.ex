@@ -104,8 +104,24 @@ defmodule AOC2025.Days.Day10 do
 
   # TODO:
   # NOTE:
-  # SLE via simplex/branch and bound???
-  # also see https://www.reddit.com/r/adventofcode/comments/1pk87hl/2025_day_10_part_2_bifurcate_your_way_to_victory/
+
+  # Easier solution without needing ILP:
+  # https://www.reddit.com/r/adventofcode/comments/1pk87hl/2025_day_10_part_2_bifurcate_your_way_to_victory/
+
+  # Very rough idea of what LP and ILP are::
+  # Linear Programming is given an objective function (minimise Z = sum x_i) and a set of inequality constraints (in this case Ax = b)
+  # Use the Simplex algorithm.
+  # Simplex algorithm adds slack variables to remove all inequalities,
+  # then pivots to vertices to find an optimal solution.
+  # The optimum is guaranteed to be at a vertex.
+  # The optimal solution gives a lower bound on the integer solution.
+
+  # ILP is harder than LP because the integer solution space is not convex.
+  # Because Simplex can return fractional solutions, we need to branch and bound to find integer solutions.
+  # Branch and bound explores the search tree, by adding constraints e.g. x1=27.5, then branch x1<=27 or x1>=28.
+  # Then rerun Simplex, pruning fathomed branches (branches which give a worse solution than the best known integer solution).
+  # Until optimum integral solution is found
+
   @doc """
       iex> input = File.read!("inputs/day10_example.txt")
       iex> AOC2025.Days.Day10.part2(input)
